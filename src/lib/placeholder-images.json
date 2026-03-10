@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "heatmap",
+      "description": "A colorful heatmap of a city grid showing areas of high and low activity.",
+      "imageUrl": "https://picsum.photos/seed/heatmap/1200/800",
+      "imageHint": "city heatmap"
+    }
+  ]
 }
