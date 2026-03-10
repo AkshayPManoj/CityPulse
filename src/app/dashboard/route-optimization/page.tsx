@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { type DynamicRouteOptimizationOutput } from "@/ai/flows/dynamic-route-optimization";
 import { optimizeRoutesAction } from "./actions";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/page-header";
 import {
   Card,
@@ -16,17 +14,10 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { Route, Wrench, Lightbulb, Map } from "lucide-react";
+import { Route, Wrench, Lightbulb, Map, Zap } from "lucide-react";
 
-// Simplified form for demonstration purposes
-type FormValues = {
-  demandPredictions: string;
-  cityEvents: string;
-  currentTrafficConditions: string;
-  existingRoutes: string;
-};
-
-const defaultValues = {
+// The default values are now used directly as the mock input data
+const mockInputData = {
   demandPredictions: JSON.stringify(
     [
       {
@@ -84,13 +75,13 @@ export default function RouteOptimizationPage() {
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit } = useForm<FormValues>({ defaultValues });
 
-  async function onSubmit(values: FormValues) {
+  async function handleOptimize() {
     setIsLoading(true);
     setResult(null);
     try {
-      const response = await optimizeRoutesAction(values);
+      // @ts-ignore
+      const response = await optimizeRoutesAction(mockInputData);
       setResult(response);
     } catch (error: any) {
       toast({
@@ -98,7 +89,7 @@ export default function RouteOptimizationPage() {
         title: "Optimization Failed",
         description:
           error.message ||
-          "The AI model failed to generate recommendations. Please check your inputs and try again.",
+          "The AI model failed to generate recommendations. Please try again.",
       });
       console.error(error);
     } finally {
@@ -115,35 +106,28 @@ export default function RouteOptimizationPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <Card>
           <CardHeader>
-            <CardTitle>Real-time Inputs</CardTitle>
+            <CardTitle>Optimization Trigger</CardTitle>
             <CardDescription>
-              Provide data in JSON format for the AI to analyze.
+              Run the AI to generate new route recommendations based on simulated real-time city data.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <div>
-                <label className="text-sm font-medium">Demand Predictions</label>
-                <Textarea {...register("demandPredictions")} rows={5} className="mt-1 font-mono text-xs" />
-              </div>
-              <div>
-                <label className="text-sm font-medium">City Events</label>
-                <Textarea {...register("cityEvents")} rows={5} className="mt-1 font-mono text-xs" />
-              </div>
-              <div>
-                <label className="text-sm font-medium">
-                  Current Traffic Conditions
-                </label>
-                <Textarea {...register("currentTrafficConditions")} rows={5} className="mt-1 font-mono text-xs"/>
-              </div>
-              <div>
-                <label className="text-sm font-medium">Existing Routes</label>
-                <Textarea {...register("existingRoutes")} rows={5} className="mt-1 font-mono text-xs"/>
-              </div>
-              <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? "Optimizing..." : "Optimize Routes"}
-              </Button>
-            </form>
+            <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg text-center">
+                <h3 className="text-lg font-semibold mb-2">Simulate Real-time Optimization</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                    The AI will use a pre-defined set of live data inputs (demand, events, traffic) to generate recommendations.
+                </p>
+                 <Button onClick={handleOptimize} disabled={isLoading} className="w-full max-w-xs">
+                    {isLoading ? (
+                    "Optimizing..."
+                    ) : (
+                    <>
+                        <Zap className="mr-2 h-4 w-4" />
+                        Optimize Routes Now
+                    </>
+                    )}
+                </Button>
+            </div>
           </CardContent>
         </Card>
         <div className="sticky top-20">
