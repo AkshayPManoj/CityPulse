@@ -4,10 +4,8 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  predictMobilityDemand,
-  type DemandPredictionOutput,
-} from "@/ai/flows/demand-prediction-insights";
+import { type DemandPredictionOutput } from "@/ai/flows/demand-prediction-insights";
+import { predictDemandAction } from "./actions";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -37,13 +35,6 @@ const formSchema = z.object({
   targetArea: z.string().min(3, { message: "Target area is required." }),
   targetDateTime: z.string().min(10, { message: "A valid date and time is required." }),
 });
-
-async function predictDemandAction(
-  values: z.infer<typeof formSchema>
-): Promise<DemandPredictionOutput> {
-  "use server";
-  return await predictMobilityDemand(values);
-}
 
 export default function DemandPredictionPage() {
   const { toast } = useToast();

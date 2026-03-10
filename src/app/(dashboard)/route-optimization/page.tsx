@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  dynamicRouteOptimization,
-  type DynamicRouteOptimizationOutput,
-} from "@/ai/flows/dynamic-route-optimization";
+import { type DynamicRouteOptimizationOutput } from "@/ai/flows/dynamic-route-optimization";
+import { optimizeRoutesAction } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/page-header";
@@ -27,24 +25,6 @@ type FormValues = {
   currentTrafficConditions: string;
   existingRoutes: string;
 };
-
-async function optimizeRoutesAction(
-  values: FormValues
-): Promise<DynamicRouteOptimizationOutput> {
-  "use server";
-  try {
-    const parsedInput = {
-      demandPredictions: JSON.parse(values.demandPredictions),
-      cityEvents: JSON.parse(values.cityEvents),
-      currentTrafficConditions: JSON.parse(values.currentTrafficConditions),
-      existingRoutes: JSON.parse(values.existingRoutes),
-    };
-    return await dynamicRouteOptimization(parsedInput);
-  } catch (e) {
-    console.error("JSON parsing error:", e);
-    throw new Error("Invalid JSON format in one of the input fields.");
-  }
-}
 
 const defaultValues = {
   demandPredictions: JSON.stringify(

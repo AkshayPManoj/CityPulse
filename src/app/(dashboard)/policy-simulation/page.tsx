@@ -4,10 +4,8 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  urbanPolicySimulator,
-  type UrbanPolicySimulatorOutput,
-} from "@/ai/flows/urban-policy-simulator";
+import { type UrbanPolicySimulatorOutput } from "@/ai/flows/urban-policy-simulator";
+import { simulatePolicyAction } from "./actions";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -52,13 +50,6 @@ const formSchema = z.object({
   durationHours: z.coerce.number().optional(),
   affectedAreaDescription: z.string().optional(),
 });
-
-async function simulatePolicyAction(
-  values: z.infer<typeof formSchema>
-): Promise<UrbanPolicySimulatorOutput> {
-  "use server";
-  return await urbanPolicySimulator(values);
-}
 
 export default function PolicySimulationPage() {
   const { toast } = useToast();
