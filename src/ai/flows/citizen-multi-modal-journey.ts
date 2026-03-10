@@ -95,6 +95,8 @@ Integrate this real-time data to dynamically adjust routes, avoid congested area
 No real-time data provided. Assume normal conditions.
 {{/if}}
 
+When calculating the 'comfortScore', think of it as a "low-stress" score. A high comfort score (e.g., 5) means low stress, while a low score (e.g., 1) indicates a high-stress journey. Factors that increase comfort (and lower stress) include: fewer transfers, lower traffic congestion, less crowded public transport (busOccupancy), and protection from adverse weather (e.g., suggesting a taxi in 'rainy' weather). A shorter overall journey duration also contributes to a higher comfort score.
+
 For each journey option, provide a clear 'routeDescription', a detailed list of 'steps' (including 'mode', 'instructions', 'durationMinutes', 'costINR', 'carbonFootprintKgCO2', and 'accessibilityInfo' if applicable), and summarize with 'totalDurationMinutes', 'totalCostINR', 'totalCarbonFootprintKgCO2', 'comfortScore' (1-5), 'efficiencyScore' (1-5), and 'isAccessible' (true/false).
 
 Additionally, calculate and include 'mobilityCredits' for each journey option. This is a software-based incentive to encourage eco-friendly travel. The credits are based on the modes of transport used in the journey's steps. The total credits for a journey is the sum of credits from each step. Use the following point system for calculation:
