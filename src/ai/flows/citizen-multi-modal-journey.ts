@@ -48,6 +48,7 @@ const CitizenMultiModalJourneyOutputSchema = z.object({
     comfortScore: z.number().min(1).max(5).describe('A comfort score for the journey (1-5, 5 being most comfortable).'),
     efficiencyScore: z.number().min(1).max(5).describe('An efficiency score for the journey (1-5, 5 being most efficient).'),
     isAccessible: z.boolean().describe('True if this journey option meets all specified accessibility needs, false otherwise.'),
+    mobilityCredits: z.number().optional().describe('Estimated mobility credits awarded for this sustainable journey, based on the modes of transport used.'),
   })).describe('A list of optimized multi-modal journey options, ranked by various factors.')
 });
 export type CitizenMultiModalJourneyOutput = z.infer<typeof CitizenMultiModalJourneyOutputSchema>;
@@ -96,7 +97,16 @@ No real-time data provided. Assume normal conditions.
 
 For each journey option, provide a clear 'routeDescription', a detailed list of 'steps' (including 'mode', 'instructions', 'durationMinutes', 'costINR', 'carbonFootprintKgCO2', and 'accessibilityInfo' if applicable), and summarize with 'totalDurationMinutes', 'totalCostINR', 'totalCarbonFootprintKgCO2', 'comfortScore' (1-5), 'efficiencyScore' (1-5), and 'isAccessible' (true/false).
 
-Ensure that 'costINR' and 'carbonFootprintKgCO2' are numeric values; estimate them if precise data is unavailable. If an accessibility need is specified, 'isAccessible' must be true for qualifying routes, and 'accessibilityInfo' for relevant steps should highlight how it meets the need.
+Additionally, calculate and include 'mobilityCredits' for each journey option. This is a software-based incentive to encourage eco-friendly travel. The credits are based on the modes of transport used in the journey's steps. The total credits for a journey is the sum of credits from each step. Use the following point system for calculation:
+- Walk ('walk'): 10 credits
+- Cycle ('cycle'): 10 credits
+- Bus ('bus'): 7 credits
+- Metro ('metro'): 7 credits
+- Shared Auto ('shared_auto'): 5 credits
+- Ride Share ('ride_share'): 5 credits
+- Taxi ('taxi'): 1 credit
+
+Ensure that 'costINR', 'carbonFootprintKgCO2', and 'mobilityCredits' are numeric values; estimate them if precise data is unavailable. If an accessibility need is specified, 'isAccessible' must be true for qualifying routes, and 'accessibilityInfo' for relevant steps should highlight how it meets the need.
 `,
 });
 

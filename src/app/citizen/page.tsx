@@ -41,6 +41,7 @@ import {
   HeartPulse,
   Route,
   Accessibility,
+  Award,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -231,10 +232,13 @@ export default function CitizenJourneyPlannerPage() {
                         </Badge>
                       )}
                   </CardTitle>
-                  <div className="flex items-center space-x-4 text-sm text-muted-foreground pt-2">
+                  <div className="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground pt-2">
                       <div className="flex items-center gap-1.5"><Clock className="size-4" /> {option.totalDurationMinutes} min</div>
                       <div className="flex items-center gap-1.5"><CircleDollarSign className="size-4" /> ₹{option.totalCostINR?.toFixed(2)}</div>
                       <div className="flex items-center gap-1.5"><Leaf className="size-4" /> {option.totalCarbonFootprintKgCO2?.toFixed(2)} kg CO₂</div>
+                      {option.mobilityCredits && (
+                        <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium"><Award className="size-4" /> {option.mobilityCredits} Credits</div>
+                      )}
                   </div>
                 </CardHeader>
                 <CardContent>
