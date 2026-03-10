@@ -43,7 +43,7 @@ export default function DashboardLayout({
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 sm:px-6">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/90 backdrop-blur-lg px-4 sm:px-6">
             <div className="flex-1">
               {/* Add Search if needed */}
             </div>
@@ -62,3 +62,5 @@ export default function DashboardLayout({
     </SidebarProvider>
   );
 }
+
+    

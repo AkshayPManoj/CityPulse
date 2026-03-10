@@ -11,11 +11,11 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,16 +42,25 @@ import {
   Route,
   Accessibility,
   Award,
+  Wheelchair,
+  Footprints,
+  Baby,
+  Volume2,
+  Eye,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 const accessibilityItems = [
-  { id: "wheelchair_friendly", label: "Wheelchair Friendly" },
-  { id: "minimal_walking", label: "Minimal Walking" },
-  { id: "stroller_friendly", label: "Stroller Friendly" },
-  { id: "audio_navigation", label: "Audio Navigation" },
+  { id: "wheelchair_friendly", label: "Wheelchair", icon: Wheelchair },
+  { id: "minimal_walking", label: "Min. Walking", icon: Footprints },
+  { id: "stroller_friendly", label: "Stroller", icon: Baby },
+  { id: "audio_navigation", label: "Audio Nav", icon: Volume2 },
+  { id: 'low_vision_support', label: 'Low Vision', icon: Eye },
 ] as const;
+
 
 const formSchema = z.object({
   startLocation: z.string().min(3, "Start location is required."),
@@ -149,52 +158,41 @@ export default function CitizenJourneyPlannerPage() {
               <FormField
                 control={form.control}
                 name="accessibilityNeeds"
-                render={() => (
+                render={({ field }) => (
                   <FormItem>
                     <div className="mb-4">
-                      <FormLabel className="text-base">
-                        Accessibility Needs
-                      </FormLabel>
-                      <FormDescription>
-                        Select any requirements for your journey.
-                      </FormDescription>
+                      <FormLabel className="text-base">Accessibility Needs</FormLabel>
+                      <FormDescription>Select any requirements for your journey.</FormDescription>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                       {accessibilityItems.map((item) => (
-                        <FormField
+                        <Label
                           key={item.id}
-                          control={form.control}
-                          name="accessibilityNeeds"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={item.id}
-                                className="flex flex-row items-start space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(item.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([
-                                            ...(field.value || []),
-                                            item.id,
-                                          ])
-                                        : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== item.id
-                                            )
-                                          );
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  {item.label}
-                                </FormLabel>
-                              </FormItem>
-                            );
-                          }}
-                        />
+                          htmlFor={item.id}
+                          className={cn(
+                            "flex flex-col items-center justify-center rounded-lg border-2 p-4 cursor-pointer transition-colors hover:bg-accent/50",
+                            field.value?.includes(item.id) ? "border-primary bg-primary/10" : "border-muted"
+                          )}
+                        >
+                          <Checkbox
+                            id={item.id}
+                            className="sr-only"
+                            checked={field.value?.includes(item.id)}
+                            onCheckedChange={(checked) => {
+                              return checked
+                                ? field.onChange([...(field.value || []), item.id])
+                                : field.onChange(
+                                    field.value?.filter(
+                                      (value) => value !== item.id
+                                    )
+                                  );
+                            }}
+                          />
+                          <div className={cn("mb-2 rounded-full p-2 transition-colors", field.value?.includes(item.id) ? 'bg-primary/20 text-primary' : 'bg-muted/70 text-muted-foreground')}>
+                            <item.icon className="h-6 w-6" />
+                          </div>
+                          <span className="text-sm font-medium text-center">{item.label}</span>
+                        </Label>
                       ))}
                     </div>
                     <FormMessage />
@@ -242,19 +240,20 @@ export default function CitizenJourneyPlannerPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center mb-4">
+                  <div className="flex items-center justify-center mb-6 overflow-x-auto pb-4">
                     {option.steps.map((step, i) => {
                       const Icon = modeIcons[step.mode] || modeIcons.default;
                       return (
                         <div key={i} className="flex items-center">
-                          <div className="flex flex-col items-center">
-                            <div className="rounded-full bg-primary/10 p-2 text-primary">
-                              <Icon className="h-5 w-5" />
+                          <div className="flex flex-col items-center text-center w-20">
+                            <div className="rounded-full bg-primary/10 p-3 mb-1 text-primary ring-4 ring-primary/10">
+                              <Icon className="h-6 w-6" />
                             </div>
-                            <p className="text-xs mt-1 capitalize">{step.mode}</p>
+                            <p className="text-xs font-semibold capitalize">{step.mode}</p>
+                            <p className="text-xs text-muted-foreground">{step.durationMinutes} min</p>
                           </div>
                           {i < option.steps.length - 1 && (
-                            <div className="w-8 mx-2 border-t-2 border-dashed"></div>
+                            <div className="w-12 shrink-0 mx-2 border-t-2 border-dashed border-primary/30"></div>
                           )}
                         </div>
                       );
@@ -295,3 +294,5 @@ export default function CitizenJourneyPlannerPage() {
     </div>
   );
 }
+
+    
