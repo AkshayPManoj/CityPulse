@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   ChartContainer,
   ChartTooltip,
@@ -8,7 +9,7 @@ import {
 import type { ChartConfig } from "@/components/ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-const chartData = [
+const initialChartData = [
   { time: "00:00", demand: 210 },
   { time: "02:00", demand: 250 },
   { time: "04:00", demand: 220 },
@@ -31,6 +32,24 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function DemandChart() {
+  const [chartData, setChartData] = useState(initialChartData);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setChartData((prevData) =>
+        prevData.map((item) => ({
+          ...item,
+          demand: Math.max(
+            150,
+            Math.floor(item.demand + (Math.random() - 0.45) * 25)
+          ),
+        }))
+      );
+    }, 2500); // update every 2.5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <ChartContainer config={chartConfig} className="h-[250px] w-full">
       <AreaChart
