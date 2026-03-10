@@ -53,7 +53,10 @@ export default function DashboardLayout({
             </Button>
             <ThemeToggle />
           </header>
-          <main className="flex-1 p-4 sm:p-6">{children}</main>
+          <div className="flex-1 p-4 sm:p-6">{children}</div>
+          <footer className="py-4 text-center text-sm text-muted-foreground border-t">
+            Developed by Akshay P M
+          </footer>
         </SidebarInset>
       </div>
     </SidebarProvider>
